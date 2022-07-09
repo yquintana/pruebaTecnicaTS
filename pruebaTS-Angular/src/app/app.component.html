@@ -1,0 +1,95 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 mt-4">
+      <h1 class="text-center">Lista de actividades</h1>
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+          <tr>
+
+            <th class="text-center">Nombre</th>
+            <th class="text-center">Descripción</th>
+            <th class="text-center">Estado</th>
+            <th class="text-center">Fecha Ejecución</th>
+            <th class="text-center">Dias Retraso</th>
+            <th class="text-center">Empleado</th>
+            <th class="text-center">&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let act of actividades">
+            <td>{{ act.nombre }}</td>
+            <td>{{ act.descripcion }}</td>
+            <td>{{ act.estado }}</td>
+            <td>{{ act.fechaEjecucion | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+            <td>{{ act.diasDiferencia}} Dias</td>
+            <td>{{ act.nombreEmpleado }}</td>
+            <td>
+              <button type="button" class="btn btn-info btn-sm mr-2"
+                (click)="mostrarActualizaActividad(act)">Editar</button>
+
+              <button type="button" class="btn btn-danger btn-sm" (click)="eliminarActividad(act)">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="btn btn-success" (click)="mostrarNuevaActividad()">Nueva Actividad</button>
+
+      <div class="mt-4">
+        <form *ngIf="formularioActividad" [formGroup]="formActividadNuevo" autocomplete="off">
+          <h2>Nueva Actividad</h2>
+          <p>Nombre: <input type="text" name="nombre" class="form-control" formControlName="nombre"
+              [(ngModel)]="nuevaActividad.nombre" />
+          </p>
+          <p>Descripción: <textarea name="descripcion" class="form-control" formControlName="descripcion"
+              [(ngModel)]="nuevaActividad.descripcion"> </textarea></p>
+          <p>Fecha Ejecución: <input type="datetime-local" class="form-control" min="{{minDate| date:'yyyy-MM-dd'}}"
+              formControlName="fechaEjecucion" name="fechaEjecucion" [(ngModel)]="nuevaActividad.fechaEjecucion" /></p>
+          <p> Empleado:
+            <select formControlName="empleado" class="form-control" [(ngModel)]="nuevaActividad.idIntEmpleado">
+              <option *ngFor="let empleado of empleados" [ngValue]="empleado.idEmpleado">
+                {{empleado.nombre}} {{empleado.apellido}}
+              </option>
+            </select>
+          </p>
+
+          <p>
+            <button type="button" class="btn btn-primary mr-2" (click)="guardarActividad(nuevaActividad)"
+              [disabled]="!formActividadNuevo.valid ">Guardar</button>
+            <button type="button" class="btn btn-warning" (click)="cancelarNuevaActividad()">Cancelar</button>
+          </p>
+        </form>
+
+        <form *ngIf="formularioEditarActividad" [formGroup]="formActividadActualizar" autocomplete="off">
+          <h2>Actualizar Actividad</h2>
+          <p>Nombre: <input type="text" name="nombre" class="form-control" formControlName="nombre"
+              [(ngModel)]="editarActividad.nombre" />
+          </p>
+          <p>Descripción: <textarea name="descripcion" class="form-control" formControlName="descripcion"
+              [(ngModel)]="editarActividad.descripcion"> </textarea></p>
+          <p>Fecha Ejecución: <input type="datetime-local" class="form-control" min="{{minDate| date:'yyyy-MM-dd'}}"
+              formControlName="fechaEjecucion" name="fechaEjecucion" [(ngModel)]="editarActividad.fechaEjecucion" /></p>
+          <p> Empleado:
+            <select formControlName="empleado" class="form-control" [(ngModel)]="editarActividad.idIntEmpleado">
+              <option *ngFor="let empleado of empleados" [ngValue]="empleado.idEmpleado">
+                {{empleado.nombre}} {{empleado.apellido}}
+              </option>
+            </select>
+          </p>
+
+          <p> Estado:
+            <select formControlName="estado" class="form-control" [(ngModel)]="editarActividad.estado">
+              <option *ngFor="let estado of estados" [ngValue]="estado">
+                {{estado}}
+              </option>
+            </select>
+          </p>
+
+          <p>
+            <button type="button" class="btn btn-primary mr-2" (click)="actualizarActividad()">Actualizar</button>
+            <button type="button" class="btn btn-warning" (click)="cancelarEditarActividad()">Cancelar</button>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
